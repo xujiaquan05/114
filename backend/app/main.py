@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-from app.core.database import test_database_connection
+from app.core.database import get_db
 from app.routers.crawler_router import router as crawler_router
 
+from app.routers import dashboard
 
 app = FastAPI(
     title="Medical Beauty Public Opinion Analysis System",
@@ -15,6 +16,7 @@ app = FastAPI(
 # Sau khi include, API /api/crawler/ptt sẽ xuất hiện trong /docs.
 app.include_router(crawler_router)
 
+app.include_router(dashboard.router)
 
 @app.get("/")
 def root():
@@ -30,7 +32,7 @@ def health_check():
     1. Backend có chạy không.
     2. Database có kết nối được không.
     """
-    db_status = test_database_connection()
+    db_status = get_db()
 
     return {
         "api": "ok",
